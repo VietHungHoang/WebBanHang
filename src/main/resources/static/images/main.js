@@ -419,6 +419,19 @@ function getNumberCartInEveryPage() {
     return false;
 }
 
+function likeProductById(productId){
+    var url="/api/products/all/like/"+ productId;
+    $.ajax({
+        type:"POST",
+        url:url,
+        success:function (res){
+        },
+        error:function (xhr,status,error){
+            console.log("nol");
+        }
+    })
+}
+
 function searchProductById(productId) {
     var userId = ''
     var cookies = document.cookie.split(';');

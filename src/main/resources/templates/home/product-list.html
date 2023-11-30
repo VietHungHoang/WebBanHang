@@ -94,10 +94,7 @@
                                 </a>
                                 <div class="product-action">
                                     <input type="hidden" th:value="${product.id}"/>
-                                    <a th:href="@{/api/products/like/(id=${product.getId()})}">
-                                        <div type="button"></div>
-                                        <i class="fa fa-heart"></i>
-                                    </a>
+                                    <a th:onclick="likeProductById([[${product.id}]])"><i class="fa fa-heart"></i></a>
                                     <a th:onclick="searchProductById([[${product.id}]])"><i class="fa fa-search"></i></a>
                                 </div>
                             </div>
@@ -283,6 +280,8 @@
 <script th:src="@{/images/main.js}"></script>
 </body>
 <script th:inline="javascript">
+
+
     function getUrl() {
         var key = $("#input-keyword").val();
         window.location.href = 'http://localhost:3000/api/products/search/?key=' + key + '&pageNumber=1';

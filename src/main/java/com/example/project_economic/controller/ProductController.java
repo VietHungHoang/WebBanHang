@@ -1,5 +1,6 @@
 package com.example.project_economic.controller;
 
+import com.example.project_economic.config.UserInfoDetails;
 import com.example.project_economic.dto.CommentDTO;
 import com.example.project_economic.dto.CountProuductDto;
 import com.example.project_economic.dto.Price;
@@ -120,16 +121,7 @@ public class ProductController {
         return "/home/createproduct";
     }
 
-    @GetMapping("/like/")
-    public String likeProduct(@RequestParam("id") Long id,Model model){
-        int pageSize = 9;
-        int pageNumber = 1;
-        this.productService.likeById(id);
-        model.addAttribute("categories",this.categoryService.findAllByActived());
-        model.addAttribute("products",this.productService.findAllIsActived());
-        model.addAttribute("prices",prices);
-        return "/home/product-list";
-    }
+
 
     @GetMapping("/productdetail/{userId}/{productId}")
     public String showProductDetail(@PathVariable Long userId,@PathVariable Long productId,Model model){
@@ -174,6 +166,13 @@ public class ProductController {
         model.addAttribute("products", this.productService.findAllIsActived(pageSize, pageNumber));
         model.addAttribute("prices",prices);
         return "home/product-list";
+    }
+
+    @PostMapping("/all/like/{productId}")
+    @ResponseBody
+    public String likeProduct(@PathVariable("productId") Long id,Model model){
+        this.productService.likeById(id);
+        return "/home/product-list";
     }
 
     @GetMapping("/search/")

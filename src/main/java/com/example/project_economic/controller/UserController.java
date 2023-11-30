@@ -135,10 +135,17 @@ public class UserController {
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("userId",((UserInfoDetails)authentication.getPrincipal()).getUserId());
         model.addAttribute("username",principal.getName());
-        model.addAttribute("products",this.findByAllProductActive());
+        model.addAttribute("products", this.productService.findAllIsActived(9, 1));
         model.addAttribute("numbercart",this.cartItemService.countCart(((UserInfoDetails)(authentication.getPrincipal())).getUserId()));
         model.addAttribute("categories", this.categoryService.findAllByActived());
         model.addAttribute("prices",new ProductController().prices);
+        int pageSize=9;
+        PageProductResponse pageProductResponse=productService.findAllPagination(1,9);
+        model.addAttribute("currentPage",1);
+        model.addAttribute("show_pagination","all");
+        model.addAttribute("lastPage",pageProductResponse.getLastPage());
+        model.addAttribute("previousPage",1);
+        model.addAttribute("totalPage",new int[pageProductResponse.getTotalPage()]);
         return "home/product-list";
     }
     @PostMapping("/update/")
