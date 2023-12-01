@@ -46,16 +46,28 @@ public class ProductImpl implements ProductService {
         }).collect(Collectors.toList());
         return productDtos;
     }
+//    @Override
+//    public List<ProductResponse> findAllIsActived(int pageSize, Integer pageNumber) {
+//    pageNumber -=1;
+//    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("product_id").descending());
+//    Page<ProductEntity>productEntities=this.productRepository.findAllProductIsAvtived(pageable);
+//        List<ProductResponse>productDtos=productEntities.stream().map((product)->{
+//            return this.enity_to_response(product);
+//        }).collect(Collectors.toList());
+//        return productDtos;
+//    }
     @Override
     public List<ProductResponse> findAllIsActived(int pageSize, Integer pageNumber) {
-    pageNumber -=1;
-    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("product_id").descending());
-    Page<ProductEntity>productEntities=this.productRepository.findAllProductIsAvtived(pageable);
+        pageNumber -=1;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("product_id").descending());
+        List<Long> ids = this.productRepository.findListIdProduct();
+        Page<ProductEntity>productEntities=this.productRepository.findAllProductIsAvtived(pageable, ids);
         List<ProductResponse>productDtos=productEntities.stream().map((product)->{
             return this.enity_to_response(product);
         }).collect(Collectors.toList());
         return productDtos;
     }
+
 
     @Override
     public ProductResponse save(ProductDto productDto, MultipartFile file) {
@@ -190,15 +202,16 @@ public class ProductImpl implements ProductService {
     public PageProductResponse findAllPagination(int pageNumber, int pageSize) {
         PageProductResponse pageProductResponse=new PageProductResponse();
         Pageable pageable= PageRequest.of(pageNumber-1,pageSize);
-        Page<ProductEntity> productEntities=this.productRepository.findAllProductIsAvtived(pageable);
+        List<Long> ids = this.productRepository.findListIdProduct();
+        Page<ProductEntity> productEntities=this.productRepository.findAllProductIsAvtived(pageable, ids);
         List<ProductResponse>productResponses=productEntities.stream()
                 .map(product -> {
                     return this.enity_to_response(product);
                 }).collect(Collectors.toList());
         int totalElement=(int)productEntities.getTotalElements();
         int lastPage = totalElement % pageSize == 0 ? totalElement/pageSize : (int)totalElement/pageSize + 1;
-//        if(lastPage == 0) lastPage = 1;
-        pageProductResponse.setTotalPage(productEntities.getTotalPages());
+        if(lastPage == 0) lastPage = 1;
+        pageProductResponse.setTotalPage(productEntities.getTotalPages() > 0 ? productEntities.getTotalPages() : 1);
         pageProductResponse.setCurrentPage(productEntities.getNumber());
         pageProductResponse.setLastPage(lastPage);
         pageProductResponse.setPageSize(pageSize);

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,12 +17,18 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     List<Object[]> countProductByCategoryId();
     @Query(value = "select * from products as p inner join categories as c on p.category_id=c.category_id where c.category_id=?1 and c.is_actived=true and p.is_actived=true",nativeQuery = true)
     List<ProductEntity>findAllProductByCategoryId(Long category_id);
-    @Query(value = "select * from products as p where p.is_actived=true and is_deteted=false",nativeQuery = true)
-    List<ProductEntity>findAllProductIsAvtived();
+//    @Query(value = "select p.* from products as p inner join categories as c on p.category_id=c.category_id where c.is_actived=true and p.is_actived=true",nativeQuery = true)
+//    Page<ProductEntity> findAllProductIsAvtived(Pageable pageable);
+    @Query(value = "select p.product_id from products as p inner join categories c on p.category_id = c.category_id where p.is_actived=true and c.is_actived = true", nativeQuery = true)
+    List<Long> findListIdProduct();
+    @Query(value = "select * from products where product_id in :ids ",nativeQuery = true)
+    Page<ProductEntity> findAllProductIsAvtived(Pageable pageable, @Param("ids") List<Long> ids);
+
+//    @Query(value = "select * from products as p where p.is_actived=true",nativeQuery = true)
+//    List<ProductEntity>findAllProductIsAvtived(Pageable pageable);
 
     @Query(value = "select * from products as p where p.is_actived=true",nativeQuery = true)
-    Page<ProductEntity> findAllProductIsAvtived(Pageable pageable);
-
+    List<ProductEntity>findAllProductIsAvtived();
     @Query(value = "select * from products where is_actived = true and name like ?1 limit ?2 offset ?3",nativeQuery = true)
     List<ProductEntity>findAllProductByKeyword(String keyword,Integer pageSize,Integer offsetNumber);
 

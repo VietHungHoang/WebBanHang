@@ -162,7 +162,6 @@ public class ProductController {
         model.addAttribute("previousPage",pageNumber>1?pageNumber-1:pageNumber);
         model.addAttribute("totalPage",new int[pageProductResponse.getTotalPage()]);
         model.addAttribute("categories",this.categoryService.findAllByActived());
-//        model.addAttribute("products", this.productService.findAllIsActived());
         model.addAttribute("products", this.productService.findAllIsActived(pageSize, pageNumber));
         model.addAttribute("prices",prices);
         return "home/product-list";
