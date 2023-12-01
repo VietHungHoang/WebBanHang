@@ -33,8 +33,6 @@ public class ShoppingCartController {
         UserEntity userEntity = userService.findUserById(userId);
         model.addAttribute("user", userEntity);
         model.addAttribute("cartItems",cartItemEntities);
-        model.addAttribute("wrong", "");
-        model.addAttribute("accept", "");
         return "home/cart";
     }
     @PostMapping("/{discountName}")

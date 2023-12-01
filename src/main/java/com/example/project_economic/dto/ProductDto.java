@@ -1,11 +1,7 @@
 package com.example.project_economic.dto;
-
-import com.example.project_economic.entity.CategoryEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
